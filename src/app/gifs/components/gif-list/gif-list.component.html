@@ -1,5 +1,5 @@
 <div class="grid gap-4">
-  @for (item of items; track item.id) {
+  @for (item of items(); track item.id) {
     <gif-list-item [gifItem]="item" />
   }
 </div>

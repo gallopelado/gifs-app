@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { TrendingItem } from 'src/app/gifs/interfaces/trendingitem.interface';
 
 @Component({
@@ -7,6 +7,5 @@ import { TrendingItem } from 'src/app/gifs/interfaces/trendingitem.interface';
   templateUrl: './gif-list-item.component.html'
 })
 export class GifListItemComponent {
-  @Input()
-  gifItem!: TrendingItem;
+  gifItem = input.required<TrendingItem>();
 }
