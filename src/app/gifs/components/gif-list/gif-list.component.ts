@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { GifListItemComponent } from "./gif-list-item/gif-list-item.component";
-import { TrendingItem } from '../../interfaces/trendingitem.interface';
+import { Gif } from '../../interfaces/gif.interface';
 
 @Component({
   selector: 'gif-list',
@@ -8,5 +8,5 @@ import { TrendingItem } from '../../interfaces/trendingitem.interface';
   templateUrl: './gif-list.component.html'
 })
 export class GifListComponent {
-  items = input.required<TrendingItem[]>();
+  items = input.required<Gif[]>();
 }

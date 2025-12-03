@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { GifListComponent } from "../../components/gif-list/gif-list.component";
-import { TrendingItem } from '../../interfaces/trendingitem.interface';
+import { GifService } from '../../services/gifs.services';
+import { Gif } from '../../interfaces/gif.interface';
 
 @Component({
   selector: 'app-trending-page',
@@ -9,34 +10,39 @@ import { TrendingItem } from '../../interfaces/trendingitem.interface';
 })
 export default class TrendingPageComponent {
 
-  trendingItems: TrendingItem[] = [{
-    id: 0,
-    class: "h-auto max-w-full rounded-base",
-    src: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg"
-  }];
-  // Filtra los arrays una sola vez.
-  grupo1: TrendingItem[] = [];
-  grupo2: TrendingItem[] = [];
-  grupo3: TrendingItem[] = [];
-  grupo4: TrendingItem[] = [];
+  //gruposDinamicos: Gif[][] = [];
 
-  constructor() {
-    this.generarItems();
-    // Filtra los arrays una sola vez.
-    this.grupo1 = this.trendingItems.filter(item => item.id <= 3);
-    this.grupo2 = this.trendingItems.filter(item => item.id > 3 && item.id <= 6);
-    this.grupo3 = this.trendingItems.filter(item => item.id > 6 && item.id <= 9);
-    this.grupo4 = this.trendingItems.filter(item => item.id > 9 && item.id <= 11);
-  }
+  gifService = inject(GifService);
 
-  generarItems(cantidadItems: number = 11): void {
-    for(let i=1; i<=cantidadItems; i++) {
-      this.trendingItems.push({
-        id: i,
-        class: "h-auto max-w-full rounded-base",
-        src: `https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-${i}.jpg`
-      });
+  trendingItems = this.gifService.trendingGifs;
+
+  private readonly tamanhoDeseado: number = 3;
+
+  gruposDinamicos = computed<Gif[][]>(() => {
+    // Para acceder al valor dentro de la señal, DEBES EJECUTARLA: this.trendingItems()
+    const items = this.trendingItems();
+
+    if (items.length === 0) {
+        // Devuelve un array vacío si aún no hay datos cargados
+        return [];
     }
+
+    // Agrupa y devuelve el resultado
+    return this.agruparItems(items, this.tamanhoDeseado);
+  });
+
+  // Puedes poner esta función dentro de tu componente o como una utilidad separada.
+  agruparItems(items: Gif[], tamanoGrupo: number): Gif[][] {
+    const grupos: Gif[][] = [];
+
+    for (let i = 0; i < items.length; i += tamanoGrupo) {
+      // El método slice() extrae los elementos desde 'i' hasta 'i + tamanoGrupo'.
+      // Esto crea un "trozo" (chunk) del array original.
+      const grupo = items.slice(i, i + tamanoGrupo);
+      grupos.push(grupo);
+    }
+
+    return grupos;
   }
 
 }
