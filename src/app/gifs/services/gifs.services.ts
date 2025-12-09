@@ -4,6 +4,7 @@ import { environment } from '@environments/environment';
 import type { GiphyResponse } from '../interfaces/giphy.interfaces';
 import { Gif } from '../interfaces/gif.interface';
 import { GifMapper } from '../mapper/gif.mapper';
+import { map } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class GifService {
@@ -31,4 +32,30 @@ export class GifService {
     });
 
   }
+
+  searchGifs(query: string) {
+    return this.http.get<GiphyResponse>(`${ environment.giphyUrl }/gifs/search`, {
+      params: {
+        api_key: environment.giphyApiKey,
+        limit: 25,
+        offset: 0,
+        q: query
+      }
+    }).pipe(
+      // tap no permite hacer transformaciones, pero si efectos secundarios
+      //tap( resp => console.log({ tap1: resp }) ),
+      map( ({ data }) => data ),
+      map( giphyitems => GifMapper.mapGiphyItemsToGifArray(giphyitems) ),
+
+      // TODO: Historial
+    );
+    // .subscribe((resp) => {
+
+    //   const gifs = GifMapper.mapGiphyItemsToGifArray(resp.data);
+    //   console.log(gifs);
+    //   this.trendingGifs.set(gifs);
+
+    // });
+  }
+
 }
