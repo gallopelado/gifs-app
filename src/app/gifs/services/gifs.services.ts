@@ -57,7 +57,7 @@ export class GifService {
           ...history,
           [query.toLocaleLowerCase()]: items
         }) );
-        console.log(this.searchHistory())
+        //console.log(this.searchHistory())
       }),
     );
     // .subscribe((resp) => {

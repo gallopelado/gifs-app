@@ -14,7 +14,7 @@
   }
 
   @for ( searchItem of gifService.searchHistoryKeys(); track searchItem) {
-  <a [routerLink]="" routerLinkActive="bg-blue-800"
+  <a [routerLink]="['/dashboard/history/', searchItem]" routerLinkActive="bg-blue-800"
     class="w-full px-2 inline-flex space-x-2 items-center border-b border-slate-700 py-3  hover:bg-white/5 transition ease-linear duration-150">
     <div>
       <i class="fa-solid fa-clock-rotate-left"></i>
