@@ -10,6 +10,7 @@ export class GifService {
   private http = inject(HttpClient);
 
   trendingGifs = signal<Gif[]>([]);
+  searchedGifs = signal<Gif[]>([]);
 
   constructor() {
     this.loadTrendingGifs();
@@ -30,5 +31,19 @@ export class GifService {
 
     });
 
+  }
+
+  searchGif(query: string) {
+    this.http.get<GiphyResponse>(`${ environment.giphyUrl }/gifs/search`, {
+      params: {
+        api_key: environment.giphyApiKey,
+        limit: 25,
+        offset: 0,
+        q: query
+      }
+    }).subscribe((resp) => {
+      const gifs = GIfMapper.mapGiphyItemsToGifArray(resp.data);
+      this.searchedGifs.set(gifs);
+    });
   }
 }
