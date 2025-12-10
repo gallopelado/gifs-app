@@ -53,7 +53,6 @@ export class GifService {
         offset: this.trendingPage() * 20,
       }
     }).subscribe((resp) => {
-      console.log(resp);
       const gifs = GifMapper.mapGiphyItemsToGifArray(resp.data);
       //this.trendingGifs.set(gifs);
       this.trendingGifs.update((currentGifList) => [
